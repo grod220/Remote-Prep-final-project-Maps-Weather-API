@@ -14,14 +14,16 @@
         height: 100%;
       }
 #floating-panel {
+  height: 80%;
   position: absolute;
-  top: 10px;
-  left: 25%;
+  bottom: 0px;
+  left: 15%;
+  width: 450px;
   z-index: 5;
   background-color: #fff;
   padding: 5px;
   border: 1px solid #999;
-  text-align: center;
+  text-align: left;
   font-family: 'Roboto','sans-serif';
   line-height: 30px;
   padding-left: 10px;
@@ -30,61 +32,72 @@
     </style>
   </head>
   <body>
-  
-  <p>HEY YOU!</p>
-  
-<form id="floating-panel">
+
+<div id="floating-panel">
+<form>
   Input a location:<br>
-    <input id="address" type="textbox" value="" autocomplete="off">
-    
-      <input id="submit" type="button" value="Geocode">
+    <input id="address" type="textbox" placeholder="enter a city" autocomplete="off" onkeypress="enterPress(event)">
+    <input id="submit" type="button" value="Geocode">
 </form>  
+</div>
 
 
- <!--    <div id="floating-panel">
-      <input id="address" type="textbox" value="Sydney, NSW">
-      <input id="submit" type="button" value="Geocode">
-    </div> -->
+      <!-- 
+      <div id="floating-panel">
+        <input id="address" type="textbox" value="Sydney, NSW">
+        <input id="submit" type="button" value="Geocode">
+      </div> 
+      -->
     <div id="map"></div>
     <script>
     
-    $("#address").keyup(function(event){
-    if(event.keyCode == 13){
-        $("#submit").click();
-    }
-    });
+
     
-function initMap() {
-  //Sets the default of the map on initial page load
-  var map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 2,
-    center: {lat: 23.9096187, lng: -29.6761281}
-  });
-  
-  // starting LAT/LNG conversion
-  var geocoder = new google.maps.Geocoder();
+      // $("#address").keypress(function(event){
+      //   if(event.keyCode == 13){
+      //       event.preventDefault();
+      //       $("#submit").click();
+      //   }
+      // });
+    
+      function initMap() {
+        //Sets the default of the map on initial page load
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 2,
+          center: {lat: 23.9096187, lng: -29.6761281}
+        });
+        
+        // starting LAT/LNG conversion
+        var geocoder = new google.maps.Geocoder();
 
-  document.getElementById('submit').addEventListener('click', function() {
-    geocodeAddress(geocoder, map);
-  });
-}
+        document.getElementById('submit').addEventListener('click', function() {
+          geocodeAddress(geocoder, map);
+        });
+      }
 
 
-function geocodeAddress(geocoder, resultsMap) {
-  var address = document.getElementById('address').value;
-  geocoder.geocode({'address': address}, function(results, status) {
-    if (status === google.maps.GeocoderStatus.OK) {
-      resultsMap.setCenter(results[0].geometry.location);
-      resultsMap.setZoom(11);
-      var marker = new google.maps.Marker({
-        map: resultsMap,
-        position: results[0].geometry.location
-      });
-    } else {
-      alert('Geocode was not successful for the following reason: ' + status);
-    }
-  });
-}
+      function geocodeAddress(geocoder, resultsMap) {
+        var address = document.getElementById('address').value;
+        geocoder.geocode({'address': address}, function(results, status) {
+          if (status === google.maps.GeocoderStatus.OK) {
+            resultsMap.setCenter(results[0].geometry.location);
+            resultsMap.setZoom(11);
+            var marker = new google.maps.Marker({
+              map: resultsMap,
+              position: results[0].geometry.location
+            });
+          } else {
+            alert('Geocode was not successful for the following reason: ' + status);
+          }
+        });
+      }
+
+      function enterPress(e) {
+        if (e.keyCode === 13) {
+          e.preventDefault();
+          geocodeAddress(geocoder, map);
+        }
+      }
 
     </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
