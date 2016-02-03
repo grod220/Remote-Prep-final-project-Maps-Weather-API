@@ -77,8 +77,8 @@ h1 {
         var map = new google.maps.Map(document.getElementById('map'), {
           zoom: 2,
           center: {lat: 23.9096187, lng: -29.6761281},
-          mapTypeId: google.maps.MapTypeId.SATELLITE
-
+          mapTypeId: google.maps.MapTypeId.SATELLITE,
+          disableDefaultUI: true
         });
 
         // starting LAT/LNG conversion
@@ -108,10 +108,71 @@ h1 {
         });
       }
 
+      function initMap() {
+         var customMapType = new google.maps.StyledMapType([
+      {
+        stylers: [
+          {hue: '#890000'},
+          {visibility: 'simplified'},
+          {gamma: 0.5},
+          {weight: 0.5}
+        ]
+      },
+      {
+        elementType: 'labels',
+        stylers: [{visibility: 'off'}]
+      },
+      {
+        featureType: 'water',
+        stylers: [{color: '#890000'}]
+      }
+    ], {
+      name: 'Custom Style'
+  });
+  var customMapTypeId = 'custom_style';
+        
+        //Sets the default of the map on initial page load
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 2,
+          center: {lat: 23.9096187, lng: -29.6761281},
+          mapTypeId: google.maps.MapTypeId.SATELLITE,
+          disableDefaultUI: true
+        });
+
+        // starting LAT/LNG conversion
+        var geocoder = new google.maps.Geocoder();
+
+        document.getElementById('submit', function() {
+ map.mapTypes.set(customMapTypeId, customMapType);
+  map.setMapTypeId(customMapTypeId);
+          });
+          
+        
+        
+      }
+      
+      function geocodeAddress(geocoder, resultsMap) {
+        var address = document.getElementById('address').value;
+        geocoder.geocode({'address': address}, function(results, status) {
+          if (status === google.maps.GeocoderStatus.OK) {
+            resultsMap.setCenter(results[0].geometry.location);
+            resultsMap.setZoom(15);
+            // var marker = new google.maps.Marker({
+            //   map: resultsMap,
+            //   position: results[0].geometry.location
+            // });
+          // var latLong = results[0].geometry.location;
+          latitude = results[0].geometry.location.lat();
+          longitude = results[0].geometry.location.lng();
+          } else {
+            alert('Geocode was not successful for the following reason: ' + status);
+          }
+        });
+      }
 
         
         
-        
+
         
         
         
