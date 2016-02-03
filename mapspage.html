@@ -4,6 +4,7 @@
     <title>Geocoding service</title>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
+<link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700' rel='stylesheet' type='text/css'>
     <style>
       html, body {
         height: 100%;
@@ -12,7 +13,7 @@
       }
       #map {
         height: 100%;
-      }
+      } 
 #floating-panel {
   height: 80%;
   position: absolute;
@@ -24,9 +25,17 @@
   padding: 5px;
   border: 1px solid #999;
   text-align: left;
-  font-family: 'Roboto','sans-serif';
+  font-family: 'Open Sans Condensed', sans-serif;
   line-height: 30px;
   padding-left: 10px;
+}
+
+h1 {
+  color: #333333;
+  font-family: 'Open Sans Condensed', sans-serif;
+  font-weight: bold;
+  margin-bottom: 0px;
+  text-align: center;
 }
 
     </style>
@@ -35,7 +44,8 @@
 
 <div id="floating-panel">
 <form>
-  Input a location:<br>
+  <h1>What should I bring?</h1><br>
+  <span style="margin-right:30px;margin-left:30px;">So where you headed?</span>
     <input id="address" type="textbox" placeholder="enter a city" autocomplete="off" onkeypress="enterPress(event)">
     <input id="submit" type="button" value="Geocode">
 </form>  
@@ -59,14 +69,18 @@
       //       $("#submit").click();
       //   }
       // });
-    
+      var latitude;
+      var longitude;
+      
       function initMap() {
         //Sets the default of the map on initial page load
         var map = new google.maps.Map(document.getElementById('map'), {
           zoom: 2,
-          center: {lat: 23.9096187, lng: -29.6761281}
+          center: {lat: 23.9096187, lng: -29.6761281},
+          mapTypeId: google.maps.MapTypeId.SATELLITE
+
         });
-        
+
         // starting LAT/LNG conversion
         var geocoder = new google.maps.Geocoder();
 
@@ -74,23 +88,39 @@
           geocodeAddress(geocoder, map);
         });
       }
-
-
+      
       function geocodeAddress(geocoder, resultsMap) {
         var address = document.getElementById('address').value;
         geocoder.geocode({'address': address}, function(results, status) {
           if (status === google.maps.GeocoderStatus.OK) {
             resultsMap.setCenter(results[0].geometry.location);
-            resultsMap.setZoom(11);
-            var marker = new google.maps.Marker({
-              map: resultsMap,
-              position: results[0].geometry.location
-            });
+            resultsMap.setZoom(15);
+            // var marker = new google.maps.Marker({
+            //   map: resultsMap,
+            //   position: results[0].geometry.location
+            // });
+          // var latLong = results[0].geometry.location;
+          latitude = results[0].geometry.location.lat();
+          longitude = results[0].geometry.location.lng();
           } else {
             alert('Geocode was not successful for the following reason: ' + status);
           }
         });
       }
+
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+
+// this needs some work. Not functioning.
 
       function enterPress(e) {
         if (e.keyCode === 13) {
