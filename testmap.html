@@ -4,8 +4,10 @@
     <title>Geocoding service</title>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css">
-<link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700' rel='stylesheet' type='text/css'>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+
     <style>
       html, body {
         height: 100%;
@@ -41,6 +43,11 @@ h1 {
   font-size: 40px;
 }
 
+.weatherrec {
+  font-size: 30px;
+  text-align: center;
+}
+
     </style>
   </head>
   <body>
@@ -48,10 +55,14 @@ h1 {
 <div id="floating-panel">
 <form>
   <h1>What should I bring?</h1><br>
-  <span style="margin-right:20px;margin-left:30px;">So where you headed?</span>
+  <span style="margin-right:20px;margin-left:15px; font-size: 18px;">So where you headed?</span>
     <input style="margin-right:20px;" id="address" type="textbox" placeholder="enter a city" autocomplete="off" onkeypress="enterPress(event)">
     <input class="btn waves-effect waves-light" id="submit" type="button" value="Geocode">
 </form>  
+
+    <p class="weatherrec"></p>
+
+
 </div>
     <div id="map"></div>
     <script>
@@ -60,10 +71,24 @@ h1 {
       var state;
       var latitude;
       var longitude;
-      var temp = 49; // Will need to be a function from weather API
+      var temp; 
       
+      // LAST DAY, NEED TO SWAP IN LAT/LONG VARIABLES
+      var getTemp = function(){
+         $.ajax({
+  url : "http://api.openweathermap.org/data/2.5/weather?lat=37.776289&lon=-122.395234&appid=44db6a862fba0b067b1930da0d769e98",
+  dataType : "jsonp",
+  success : function(parsed_json) {
+  temp = parsed_json['main']['temp'];
+   }
+  });
+      };
+      
+ 
+
+
       function initMap() {
-        
+                
         var redMapType = new google.maps.StyledMapType([
       {
         stylers: [
@@ -107,7 +132,7 @@ h1 {
       name: 'Custom Style'
   });
   var blueMapTypeId = 'custom_style';
-        
+
         var map = new google.maps.Map(document.getElementById('map'), {
           zoom: 2,
           center: {lat: 23.9096187, lng: -29.6761281},
@@ -119,7 +144,7 @@ h1 {
 
         document.getElementById('submit').addEventListener('click', function() {
           geocodeAddress(geocoder, map);
-          if (temp > 80){
+        if (temp > 80){
             map.mapTypes.set(redMapTypeId, redMapType);
             map.setMapTypeId(redMapTypeId);
           }
@@ -127,9 +152,17 @@ h1 {
             map.mapTypes.set(blueMapTypeId, blueMapType);
             map.setMapTypeId(blueMapTypeId);
           }
-          
+           
         });
+        
+
+        
+            
       }
+
+          
+      
+      
       
       function geocodeAddress(geocoder, resultsMap) {
         var address = document.getElementById('address').value;
@@ -141,6 +174,7 @@ h1 {
           state = results[0].address_components[2].short_name;
           latitude = results[0].geometry.location.lat();
           longitude = results[0].geometry.location.lng();
+          getTemp();
           } else {
             alert('Geocode was not successful for the following reason: ' + status);
           }
@@ -148,7 +182,16 @@ h1 {
       }
         
 
-// this needs some work. Not functioning.
+if (temp < 50) {
+  $(".weatherrec").text('Bro its cold! Seriously get that jumper.').css('color', 'blue');
+}
+if (temp > 80) {
+  $(".weatherrec").text('Dude, sun\'s out. Get those shades.').css('color', 'red');
+}
+
+
+
+// this needs some work. Not functioning. Supposed to allow enter key to submit address.
 
       function enterPress(e) {
         if (e.keyCode === 13) {
@@ -158,7 +201,8 @@ h1 {
       }
 
     </script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    
+    
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC8ow_45a6Evhl4PNCyQuNthA0zGrYCn_Y&signed_in=true&callback=initMap"
         async defer></script>
   </body>
