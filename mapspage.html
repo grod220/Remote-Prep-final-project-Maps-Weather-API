@@ -63,119 +63,174 @@ h1 {
     
 
     
-      // $("#address").keypress(function(event){
-      //   if(event.keyCode == 13){
-      //       event.preventDefault();
-      //       $("#submit").click();
-      //   }
-      // });
-      var latitude;
-      var longitude;
+//       // $("#address").keypress(function(event){
+//       //   if(event.keyCode == 13){
+//       //       event.preventDefault();
+//       //       $("#submit").click();
+//       //   }
+//       // });
+//       var latitude;
+//       var longitude;
+//       var zoom;
+//       var center;
       
-      function initMap() {
-        //Sets the default of the map on initial page load
-        var map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 2,
-          center: {lat: 23.9096187, lng: -29.6761281},
-          mapTypeId: google.maps.MapTypeId.SATELLITE,
-          disableDefaultUI: true
-        });
-
-        // starting LAT/LNG conversion
-        var geocoder = new google.maps.Geocoder();
-
-        document.getElementById('submit').addEventListener('click', function() {
-          geocodeAddress(geocoder, map);
-        });
-      }
-      
-      function geocodeAddress(geocoder, resultsMap) {
-        var address = document.getElementById('address').value;
-        geocoder.geocode({'address': address}, function(results, status) {
-          if (status === google.maps.GeocoderStatus.OK) {
-            resultsMap.setCenter(results[0].geometry.location);
-            resultsMap.setZoom(15);
-            // var marker = new google.maps.Marker({
-            //   map: resultsMap,
-            //   position: results[0].geometry.location
-            // });
-          // var latLong = results[0].geometry.location;
-          latitude = results[0].geometry.location.lat();
-          longitude = results[0].geometry.location.lng();
-          } else {
-            alert('Geocode was not successful for the following reason: ' + status);
-          }
-        });
-      }
-
-      function initMap() {
-         var customMapType = new google.maps.StyledMapType([
-      {
-        stylers: [
-          {hue: '#890000'},
-          {visibility: 'simplified'},
-          {gamma: 0.5},
-          {weight: 0.5}
-        ]
-      },
-      {
-        elementType: 'labels',
-        stylers: [{visibility: 'off'}]
-      },
-      {
-        featureType: 'water',
-        stylers: [{color: '#890000'}]
-      }
-    ], {
-      name: 'Custom Style'
-  });
-  var customMapTypeId = 'custom_style';
+//       function initMap() {
+//         //Sets the default of the map on initial page load
+//         var map = new google.maps.Map(document.getElementById('map'), {
+//           zoom: 2,
+//           center: {lat: 23.9096187, lng: -29.6761281},
+//           mapTypeId: google.maps.MapTypeId.SATELLITE,
+//           disableDefaultUI: true
+//         });
         
-        //Sets the default of the map on initial page load
-        var map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 2,
-          center: {lat: 23.9096187, lng: -29.6761281},
-          mapTypeId: google.maps.MapTypeId.SATELLITE,
-          disableDefaultUI: true
-        });
+//         zoom = map['zoom'];
+//         center = map['center'];
 
-        // starting LAT/LNG conversion
-        var geocoder = new google.maps.Geocoder();
+//         // starting LAT/LNG conversion
+//         var geocoder = new google.maps.Geocoder();
 
-        document.getElementById('submit', function() {
- map.mapTypes.set(customMapTypeId, customMapType);
-  map.setMapTypeId(customMapTypeId);
-          });
+//         document.getElementById('submit').addEventListener('click', function() {
+//           geocodeAddress(geocoder, map);
           
-        
-        
-      }
+//         });
+//       }
       
-      function geocodeAddress(geocoder, resultsMap) {
-        var address = document.getElementById('address').value;
-        geocoder.geocode({'address': address}, function(results, status) {
-          if (status === google.maps.GeocoderStatus.OK) {
-            resultsMap.setCenter(results[0].geometry.location);
-            resultsMap.setZoom(15);
-            // var marker = new google.maps.Marker({
-            //   map: resultsMap,
-            //   position: results[0].geometry.location
-            // });
-          // var latLong = results[0].geometry.location;
-          latitude = results[0].geometry.location.lat();
-          longitude = results[0].geometry.location.lng();
-          } else {
-            alert('Geocode was not successful for the following reason: ' + status);
-          }
-        });
-      }
+//       function geocodeAddress(geocoder, resultsMap) {
+//         var address = document.getElementById('address').value;
+//         geocoder.geocode({'address': address}, function(results, status) {
+//           if (status === google.maps.GeocoderStatus.OK) {
+//             resultsMap.setCenter(results[0].geometry.location);
+//             resultsMap.setZoom(15);
+//             // var marker = new google.maps.Marker({
+//             //   map: resultsMap,
+//             //   position: results[0].geometry.location
+//             // });
+//           // var latLong = results[0].geometry.location;
+//           latitude = results[0].geometry.location.lat();
+//           longitude = results[0].geometry.location.lng();
+//           } else {
+//             alert('Geocode was not successful for the following reason: ' + status);
+//           }
+//         });
+//       }
 
-        
-        
+// // testing out changing color
 
+// // function initMap() {
+// //   var customMapType = new google.maps.StyledMapType([
+// //       {
+// //         stylers: [
+// //           {hue: '#890000'},
+// //           {visibility: 'simplified'},
+// //           {gamma: 0.5},
+// //           {weight: 0.5}
+// //         ]
+// //       },
+// //       {
+// //         elementType: 'labels',
+// //         stylers: [{visibility: 'off'}]
+// //       },
+// //       {
+// //         featureType: 'water',
+// //         stylers: [{color: '#890000'}]
+// //       }
+// //     ], {
+// //       name: 'Custom Style'
+// //   });
+// //   var customMapTypeId = 'custom_style';
+
+// //   var map = new google.maps.Map(document.getElementById('map'), {
+// //     zoom: 12,
+// //     center: {lat: 40.674, lng: -73.946},  // Brooklyn.
+// //   });
+
+// //   map.mapTypes.set(customMapTypeId, customMapType);
+// //   map.setMapTypeId(customMapTypeId);
+// // }
+
+// //   var Forecast = function(info){
+// //   this.latitude = latitude;
+// //   this.longitude = longitude;
+// //   //   this.city = sydney;
+// //   // this.state = australia;
+// // }
+
+
+//WEATHER FUNCTIONALITY
+
+$(document).ready(function(){
+  // sets a submit event to the element with class search(in our case the form)
+  // $(".search").on("submit", function(e){
+    // prevents the default action, the default action here will cause a page refresh, which we don't want
+    // e.preventDefault()
+    // grabs values from the the input fields and stores them to a variable
+    // latitude = $(".searchLat").val()
+    // longitude = $(".searchLng").val()
+    // creates a new forecast object using our Forecast constructor we define earlier.
+    forecast = new Forecast({lat: latitude, lng: longitude})
+    // calls .loadForecast to make the API call
+    forecast.loadForecast().then(function(){
+      // in the promise we create a new view passing in the forecast object
+      view = new ForecastView(forecast)
+      // empties forecast if one already exists
+      view.clearContainer()
+      // renders the new forecast
+      view.render()
+    })
+  })
+})
+
+var tempF;
+
+Forecast.prototype.loadForecast = function(){
+  var self = this
+  // url to hit the API endpoint, make sure to put your key in!
+  var url ="http://api.wunderground.com/api/e643881199d3aa53/conditions/q/" + this.latitude + "," + this.longitude + ".json"
+  // makes the AJAX get request using $.getJSON() passing in the URL above
+  var request = $.getJSON(url)
+  // in this promise `.then` we'll set some attributes for a Forecast by drilling
+  //  through the response we get back from the API
+  .then(function(response){
+    self.tempF = response.current_observation.temp_f;
+    self.iconUrl = response.current_observation.icon_url;
+    self.description = response.current_observation.weather;
+    tempF = self.tempF;
+  });
+  // finally we return the request because we need to be able to continue to
+  // chain promises on the return of this function
+  return request;
+};       
         
-        
-        
+ var ForecastView = function(forecast){
+  // set a Forecast model as a property of the view
+  this.forecast = forecast;
+  // sets the div with class forecast as the domain of this view
+  this.$el = $(".forecast");
+}
+//adding tempF variable to capture forecast.tempF value
+var tempF;
+
+ForecastView.prototype = {
+  // DOM manipulation using a Forecast
+  forecastTemplate: function(forecast){
+    var html = $("#floating-panel");
+    html.append("<h2>Weather For " + forecast.city + ", " + forecast.state + "</h2>");
+    html.append("<img class='artist-photo' src='" + forecast.iconUrl + "'>");
+    html.append("<p class='description'>" + forecast.description + "</p>")
+    html.append("<p class='tempF'>Current Temp in Fahrenheit: " + forecast.tempF + "°</p>")
+    tempF = forecast.tempF;
+    return(html);
+  },
+  // function that changes the HTML of the $el(div with class forecast) to what was generated by the template
+  render: function(){
+    var self = this;
+    self.$el.html(self.forecastTemplate(self.forecast).html());
+  },
+  // emptys all elements withing the $el (div with class forecast)
+  clearContainer: function(){
+    this.$el.empty()
+  }
+}       
         
         
         
